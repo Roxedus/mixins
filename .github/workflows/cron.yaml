@@ -2,6 +2,7 @@
 name: Daily content regeneration
 
 on:
+  workflow_dispatch:
   schedule:
     - cron:  '3 3 * * *'
 
