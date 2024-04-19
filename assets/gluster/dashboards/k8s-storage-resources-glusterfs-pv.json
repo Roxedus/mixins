@@ -56,7 +56,6 @@
                      "expr": "gluster_volume_up{volume = \"$Volume\"}",
                      "format": "time_series",
                      "instant": true,
-                     "intervalFactor": 2,
                      "refId": "A"
                   }
                ],
@@ -145,7 +144,6 @@
                      "expr": "gluster:volume_capacity_used_bytes_total:sum{volume='$Volume'} / gluster:volume_capacity_total_bytes:sum{volume='$Volume'}",
                      "format": "time_series",
                      "instant": true,
-                     "intervalFactor": 2,
                      "refId": "A"
                   }
                ],
@@ -222,7 +220,6 @@
                      "expr": "gluster:volume_capacity_total_bytes:sum{volume='$Volume'} - gluster:volume_capacity_used_bytes_total:sum{volume='$Volume'}",
                      "format": "time_series",
                      "instant": true,
-                     "intervalFactor": 2,
                      "refId": "A"
                   }
                ],
@@ -299,7 +296,6 @@
                      "expr": "(sum (gluster_volume_profile_total_reads_interval{volume='$Volume'}) + sum(gluster_volume_profile_total_writes_interval{volume='$Volume'}))/max(gluster_volume_profile_duration_secs_interval{volume='$Volume'})",
                      "format": "time_series",
                      "instant": true,
-                     "intervalFactor": 2,
                      "refId": "A"
                   }
                ],
@@ -373,7 +369,6 @@
                   {
                      "expr": "gluster:volume_capacity_used_bytes_total:sum{volume='$Volume'}",
                      "format": "time_series",
-                     "intervalFactor": 2,
                      "legendFormat": "{{$Volume}}",
                      "legendLink": null
                   }
@@ -448,7 +443,6 @@
                   {
                      "expr": "(sum (gluster_volume_profile_total_reads_interval{volume='$Volume'}) + sum(gluster_volume_profile_total_writes_interval{volume='$Volume'}))/max(gluster_volume_profile_duration_secs_interval{volume='$Volume'})",
                      "format": "time_series",
-                     "intervalFactor": 2,
                      "legendFormat": "{{$Volume}}",
                      "legendLink": null
                   }
@@ -535,7 +529,6 @@
                   {
                      "expr": "100*(gluster_thinpool_metadata_used_bytes{volume='$Volume'} / gluster_thinpool_metadata_total_bytes{volume='$Volume'})",
                      "format": "time_series",
-                     "intervalFactor": 2,
                      "legendFormat": "{{thinpool_name}}",
                      "legendLink": null
                   }
@@ -610,7 +603,6 @@
                   {
                      "expr": "100*(gluster_thinpool_data_used_bytes{volume='$Volume'} / gluster_thinpool_data_total_bytes{volume='$Volume'})",
                      "format": "time_series",
-                     "intervalFactor": 2,
                      "legendFormat": "{{thinpool_name}}",
                      "legendLink": null
                   }
@@ -700,7 +692,6 @@
                      "expr": "gluster_volume_brick_count{volume='$Volume'}",
                      "format": "time_series",
                      "instant": true,
-                     "intervalFactor": 2,
                      "refId": "A"
                   }
                ],
@@ -783,7 +774,6 @@
                      "expr": "count (gluster_brick_up{volume='$Volume'} == 1)",
                      "format": "time_series",
                      "instant": true,
-                     "intervalFactor": 2,
                      "refId": "A"
                   }
                ],
@@ -866,7 +856,6 @@
                      "expr": "count(gluster_brick_up{volume='$Volume'}) - count (gluster_brick_up{volume='$Volume'} == 1)",
                      "format": "time_series",
                      "instant": true,
-                     "intervalFactor": 2,
                      "refId": "A"
                   }
                ],
@@ -943,7 +932,6 @@
                      "expr": "avg (gluster_brick_capacity_used_bytes{volume='$Volume'} / gluster_brick_capacity_bytes_total{volume='$Volume'})",
                      "format": "time_series",
                      "instant": true,
-                     "intervalFactor": 2,
                      "refId": "A"
                   }
                ],
@@ -1020,7 +1008,6 @@
                      "expr": "min (gluster_brick_capacity_used_bytes{volume='$Volume'} / gluster_brick_capacity_bytes_total{volume='$Volume'})",
                      "format": "time_series",
                      "instant": true,
-                     "intervalFactor": 2,
                      "refId": "A"
                   }
                ],
@@ -1097,7 +1084,6 @@
                      "expr": "max (gluster_brick_capacity_used_bytes{volume='$Volume'} / gluster_brick_capacity_bytes_total{volume='$Volume'})",
                      "format": "time_series",
                      "instant": true,
-                     "intervalFactor": 2,
                      "refId": "A"
                   }
                ],
@@ -1174,7 +1160,6 @@
                      "expr": "count((gluster_brick_capacity_used_bytes{volume='$Volume'} / gluster_brick_capacity_bytes_total{volume='$Volume'}) < 0.8)",
                      "format": "time_series",
                      "instant": true,
-                     "intervalFactor": 2,
                      "refId": "A"
                   }
                ],
@@ -1251,7 +1236,6 @@
                      "expr": "count((gluster_brick_capacity_used_bytes{volume='$Volume'} / gluster_brick_capacity_bytes_total{volume='$Volume'}) < 0.9) - count((gluster_brick_capacity_used_bytes{volume='$Volume'} / gluster_brick_capacity_bytes_total{volume='$Volume'}) < 0.8)",
                      "format": "time_series",
                      "instant": true,
-                     "intervalFactor": 2,
                      "refId": "A"
                   }
                ],
@@ -1328,7 +1312,6 @@
                      "expr": "count(gluster_brick_capacity_used_bytes{volume='$Volume'}) - count((gluster_brick_capacity_used_bytes{volume='$Volume'} / gluster_brick_capacity_bytes_total{volume='$Volume'}) < 0.9)",
                      "format": "time_series",
                      "instant": true,
-                     "intervalFactor": 2,
                      "refId": "A"
                   }
                ],
@@ -1405,7 +1388,6 @@
                      "expr": "avg((gluster_volume_profile_total_reads_interval{volume='$Volume'} + gluster_volume_profile_total_writes_interval{volume='$Volume'}) /gluster_volume_profile_duration_secs_interval{volume='$Volume'})",
                      "format": "time_series",
                      "instant": true,
-                     "intervalFactor": 2,
                      "refId": "A"
                   }
                ],
@@ -1482,7 +1464,6 @@
                      "expr": "min((gluster_volume_profile_total_reads_interval{volume='$Volume'} + gluster_volume_profile_total_writes_interval{volume='$Volume'}) /gluster_volume_profile_duration_secs_interval{volume='$Volume'})",
                      "format": "time_series",
                      "instant": true,
-                     "intervalFactor": 2,
                      "refId": "A"
                   }
                ],
@@ -1559,7 +1540,6 @@
                      "expr": "max((gluster_volume_profile_total_reads_interval{volume='$Volume'} + gluster_volume_profile_total_writes_interval{volume='$Volume'}) /gluster_volume_profile_duration_secs_interval{volume='$Volume'})",
                      "format": "time_series",
                      "instant": true,
-                     "intervalFactor": 2,
                      "refId": "A"
                   }
                ],
@@ -1636,7 +1616,6 @@
                      "expr": "sum (gluster_volume_heal_count{volume='$Volume'})",
                      "format": "time_series",
                      "instant": true,
-                     "intervalFactor": 2,
                      "refId": "A"
                   }
                ],
@@ -1713,7 +1692,6 @@
                      "expr": "sum (gluster_volume_split_brain_heal_count{volume='$Volume'})",
                      "format": "time_series",
                      "instant": true,
-                     "intervalFactor": 2,
                      "refId": "A"
                   }
                ],
@@ -1849,7 +1827,6 @@
                      "expr": "sort(sum(gluster_volume_profile_fop_avg_latency{volume='$Volume', fop!=''})by (fop))",
                      "format": "table",
                      "instant": true,
-                     "intervalFactor": 2,
                      "legendFormat": "",
                      "refId": "A"
                   },
@@ -1857,7 +1834,6 @@
                      "expr": "",
                      "format": "table",
                      "instant": true,
-                     "intervalFactor": 2,
                      "legendFormat": "",
                      "refId": "B"
                   }
@@ -1933,7 +1909,6 @@
                   {
                      "expr": "sum(gluster_volume_profile_fop_total_hits_on_aggregated_fops{volume='$Volume',fop='LOCK_OPS'}) by (volume)",
                      "format": "time_series",
-                     "intervalFactor": 2,
                      "legendFormat": "",
                      "legendLink": null
                   }
@@ -2008,7 +1983,6 @@
                   {
                      "expr": "sum(gluster_volume_profile_fop_total_hits_on_aggregated_fops{volume='$Volume',fop='READ_WRITE_OPS'}) by (volume)",
                      "format": "time_series",
-                     "intervalFactor": 2,
                      "legendFormat": "",
                      "legendLink": null
                   }
@@ -2083,7 +2057,6 @@
                   {
                      "expr": "sum(gluster_volume_profile_fop_total_hits_on_aggregated_fops{volume='$Volume',fop='INODE_OPS'}) by (volume)",
                      "format": "time_series",
-                     "intervalFactor": 2,
                      "legendFormat": "",
                      "legendLink": null
                   }
@@ -2158,7 +2131,6 @@
                   {
                      "expr": "sum(gluster_volume_profile_fop_total_hits_on_aggregated_fops{volume='$Volume',fop='ENTRY_OPS'}) by (volume)",
                      "format": "time_series",
-                     "intervalFactor": 2,
                      "legendFormat": "",
                      "legendLink": null
                   }
@@ -2219,7 +2191,7 @@
                "value": "default"
             },
             "hide": 0,
-            "label": "Data Source",
+            "label": "Data source",
             "name": "datasource",
             "options": [ ],
             "query": "prometheus",

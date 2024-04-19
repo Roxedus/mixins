@@ -21,14 +21,11 @@
                "datasource": "$datasource",
                "fill": 10,
                "id": 1,
-               "interval": "1m",
                "legend": {
-                  "alignAsTable": true,
                   "avg": false,
                   "current": false,
                   "max": false,
                   "min": false,
-                  "rightSide": true,
                   "show": true,
                   "total": false,
                   "values": false
@@ -69,21 +66,18 @@
                   {
                      "expr": "sum(node_namespace_pod_container:container_cpu_usage_seconds_total:sum_irate{namespace=\"$namespace\", pod=\"$pod\", cluster=\"$cluster\"}) by (container)",
                      "format": "time_series",
-                     "intervalFactor": 2,
                      "legendFormat": "{{container}}",
                      "legendLink": null
                   },
                   {
                      "expr": "sum(\n    kube_pod_container_resource_requests{job=\"kube-state-metrics\", cluster=\"$cluster\", namespace=\"$namespace\", pod=\"$pod\", resource=\"cpu\"}\n)\n",
                      "format": "time_series",
-                     "intervalFactor": 2,
                      "legendFormat": "requests",
                      "legendLink": null
                   },
                   {
                      "expr": "sum(\n    kube_pod_container_resource_limits{job=\"kube-state-metrics\", cluster=\"$cluster\", namespace=\"$namespace\", pod=\"$pod\", resource=\"cpu\"}\n)\n",
                      "format": "time_series",
-                     "intervalFactor": 2,
                      "legendFormat": "limits",
                      "legendLink": null
                   }
@@ -93,7 +87,7 @@
                "timeShift": null,
                "title": "CPU Usage",
                "tooltip": {
-                  "shared": false,
+                  "shared": true,
                   "sort": 2,
                   "value_type": "individual"
                },
@@ -144,14 +138,11 @@
                "datasource": "$datasource",
                "fill": 10,
                "id": 2,
-               "interval": "1m",
                "legend": {
-                  "alignAsTable": true,
                   "avg": false,
                   "current": true,
                   "max": true,
                   "min": false,
-                  "rightSide": true,
                   "show": true,
                   "total": false,
                   "values": false
@@ -173,7 +164,6 @@
                   {
                      "expr": "sum(increase(container_cpu_cfs_throttled_periods_total{job=\"cadvisor\", namespace=\"$namespace\", pod=\"$pod\", container!=\"\", cluster=\"$cluster\"}[$__rate_interval])) by (container) /sum(increase(container_cpu_cfs_periods_total{job=\"cadvisor\", namespace=\"$namespace\", pod=\"$pod\", container!=\"\", cluster=\"$cluster\"}[$__rate_interval])) by (container)",
                      "format": "time_series",
-                     "intervalFactor": 2,
                      "legendFormat": "{{container}}",
                      "legendLink": null
                   }
@@ -192,7 +182,7 @@
                "timeShift": null,
                "title": "CPU Throttling",
                "tooltip": {
-                  "shared": false,
+                  "shared": true,
                   "sort": 2,
                   "value_type": "individual"
                },
@@ -243,14 +233,11 @@
                "datasource": "$datasource",
                "fill": 1,
                "id": 3,
-               "interval": "1m",
                "legend": {
-                  "alignAsTable": true,
                   "avg": false,
                   "current": false,
                   "max": false,
                   "min": false,
-                  "rightSide": true,
                   "show": true,
                   "total": false,
                   "values": false
@@ -382,7 +369,6 @@
                      "expr": "sum(node_namespace_pod_container:container_cpu_usage_seconds_total:sum_irate{cluster=\"$cluster\", namespace=\"$namespace\", pod=\"$pod\"}) by (container)",
                      "format": "table",
                      "instant": true,
-                     "intervalFactor": 2,
                      "legendFormat": "",
                      "refId": "A"
                   },
@@ -390,7 +376,6 @@
                      "expr": "sum(cluster:namespace:pod_cpu:active:kube_pod_container_resource_requests{cluster=\"$cluster\", namespace=\"$namespace\", pod=\"$pod\"}) by (container)",
                      "format": "table",
                      "instant": true,
-                     "intervalFactor": 2,
                      "legendFormat": "",
                      "refId": "B"
                   },
@@ -398,7 +383,6 @@
                      "expr": "sum(node_namespace_pod_container:container_cpu_usage_seconds_total:sum_irate{cluster=\"$cluster\", namespace=\"$namespace\", pod=\"$pod\"}) by (container) / sum(cluster:namespace:pod_cpu:active:kube_pod_container_resource_requests{cluster=\"$cluster\", namespace=\"$namespace\", pod=\"$pod\"}) by (container)",
                      "format": "table",
                      "instant": true,
-                     "intervalFactor": 2,
                      "legendFormat": "",
                      "refId": "C"
                   },
@@ -406,7 +390,6 @@
                      "expr": "sum(cluster:namespace:pod_cpu:active:kube_pod_container_resource_limits{cluster=\"$cluster\", namespace=\"$namespace\", pod=\"$pod\"}) by (container)",
                      "format": "table",
                      "instant": true,
-                     "intervalFactor": 2,
                      "legendFormat": "",
                      "refId": "D"
                   },
@@ -414,7 +397,6 @@
                      "expr": "sum(node_namespace_pod_container:container_cpu_usage_seconds_total:sum_irate{cluster=\"$cluster\", namespace=\"$namespace\", pod=\"$pod\"}) by (container) / sum(cluster:namespace:pod_cpu:active:kube_pod_container_resource_limits{cluster=\"$cluster\", namespace=\"$namespace\", pod=\"$pod\"}) by (container)",
                      "format": "table",
                      "instant": true,
-                     "intervalFactor": 2,
                      "legendFormat": "",
                      "refId": "E"
                   }
@@ -424,7 +406,7 @@
                "timeShift": null,
                "title": "CPU Quota",
                "tooltip": {
-                  "shared": false,
+                  "shared": true,
                   "sort": 2,
                   "value_type": "individual"
                },
@@ -476,14 +458,11 @@
                "datasource": "$datasource",
                "fill": 10,
                "id": 4,
-               "interval": "1m",
                "legend": {
-                  "alignAsTable": true,
                   "avg": false,
                   "current": false,
                   "max": false,
                   "min": false,
-                  "rightSide": true,
                   "show": true,
                   "total": false,
                   "values": false
@@ -526,21 +505,18 @@
                   {
                      "expr": "sum(container_memory_working_set_bytes{job=\"cadvisor\", cluster=\"$cluster\", namespace=\"$namespace\", pod=\"$pod\", container!=\"\", image!=\"\"}) by (container)",
                      "format": "time_series",
-                     "intervalFactor": 2,
                      "legendFormat": "{{container}}",
                      "legendLink": null
                   },
                   {
                      "expr": "sum(\n    kube_pod_container_resource_requests{job=\"kube-state-metrics\", cluster=\"$cluster\", namespace=\"$namespace\", pod=\"$pod\", resource=\"memory\"}\n)\n",
                      "format": "time_series",
-                     "intervalFactor": 2,
                      "legendFormat": "requests",
                      "legendLink": null
                   },
                   {
                      "expr": "sum(\n    kube_pod_container_resource_limits{job=\"kube-state-metrics\", cluster=\"$cluster\", namespace=\"$namespace\", pod=\"$pod\", resource=\"memory\"}\n)\n",
                      "format": "time_series",
-                     "intervalFactor": 2,
                      "legendFormat": "limits",
                      "legendLink": null
                   }
@@ -550,7 +526,7 @@
                "timeShift": null,
                "title": "Memory Usage (WSS)",
                "tooltip": {
-                  "shared": false,
+                  "shared": true,
                   "sort": 2,
                   "value_type": "individual"
                },
@@ -601,14 +577,11 @@
                "datasource": "$datasource",
                "fill": 1,
                "id": 5,
-               "interval": "1m",
                "legend": {
-                  "alignAsTable": true,
                   "avg": false,
                   "current": false,
                   "max": false,
                   "min": false,
-                  "rightSide": true,
                   "show": true,
                   "total": false,
                   "values": false
@@ -785,7 +758,6 @@
                      "expr": "sum(container_memory_working_set_bytes{job=\"cadvisor\", cluster=\"$cluster\", namespace=\"$namespace\", pod=\"$pod\", container!=\"\", image!=\"\"}) by (container)",
                      "format": "table",
                      "instant": true,
-                     "intervalFactor": 2,
                      "legendFormat": "",
                      "refId": "A"
                   },
@@ -793,7 +765,6 @@
                      "expr": "sum(cluster:namespace:pod_memory:active:kube_pod_container_resource_requests{cluster=\"$cluster\", namespace=\"$namespace\", pod=\"$pod\"}) by (container)",
                      "format": "table",
                      "instant": true,
-                     "intervalFactor": 2,
                      "legendFormat": "",
                      "refId": "B"
                   },
@@ -801,7 +772,6 @@
                      "expr": "sum(container_memory_working_set_bytes{job=\"cadvisor\", cluster=\"$cluster\", namespace=\"$namespace\", pod=\"$pod\", image!=\"\"}) by (container) / sum(cluster:namespace:pod_memory:active:kube_pod_container_resource_requests{cluster=\"$cluster\", namespace=\"$namespace\", pod=\"$pod\"}) by (container)",
                      "format": "table",
                      "instant": true,
-                     "intervalFactor": 2,
                      "legendFormat": "",
                      "refId": "C"
                   },
@@ -809,7 +779,6 @@
                      "expr": "sum(cluster:namespace:pod_memory:active:kube_pod_container_resource_limits{cluster=\"$cluster\", namespace=\"$namespace\", pod=\"$pod\"}) by (container)",
                      "format": "table",
                      "instant": true,
-                     "intervalFactor": 2,
                      "legendFormat": "",
                      "refId": "D"
                   },
@@ -817,7 +786,6 @@
                      "expr": "sum(container_memory_working_set_bytes{job=\"cadvisor\", cluster=\"$cluster\", namespace=\"$namespace\", pod=\"$pod\", container!=\"\", image!=\"\"}) by (container) / sum(cluster:namespace:pod_memory:active:kube_pod_container_resource_limits{cluster=\"$cluster\", namespace=\"$namespace\", pod=\"$pod\"}) by (container)",
                      "format": "table",
                      "instant": true,
-                     "intervalFactor": 2,
                      "legendFormat": "",
                      "refId": "E"
                   },
@@ -825,7 +793,6 @@
                      "expr": "sum(container_memory_rss{job=\"cadvisor\", cluster=\"$cluster\", namespace=\"$namespace\", pod=\"$pod\", container != \"\", container != \"POD\"}) by (container)",
                      "format": "table",
                      "instant": true,
-                     "intervalFactor": 2,
                      "legendFormat": "",
                      "refId": "F"
                   },
@@ -833,7 +800,6 @@
                      "expr": "sum(container_memory_cache{job=\"cadvisor\", cluster=\"$cluster\", namespace=\"$namespace\", pod=\"$pod\", container != \"\", container != \"POD\"}) by (container)",
                      "format": "table",
                      "instant": true,
-                     "intervalFactor": 2,
                      "legendFormat": "",
                      "refId": "G"
                   },
@@ -841,7 +807,6 @@
                      "expr": "sum(container_memory_swap{job=\"cadvisor\", cluster=\"$cluster\", namespace=\"$namespace\", pod=\"$pod\", container != \"\", container != \"POD\"}) by (container)",
                      "format": "table",
                      "instant": true,
-                     "intervalFactor": 2,
                      "legendFormat": "",
                      "refId": "H"
                   }
@@ -851,7 +816,7 @@
                "timeShift": null,
                "title": "Memory Quota",
                "tooltip": {
-                  "shared": false,
+                  "shared": true,
                   "sort": 2,
                   "value_type": "individual"
                },
@@ -903,14 +868,11 @@
                "datasource": "$datasource",
                "fill": 10,
                "id": 6,
-               "interval": "1m",
                "legend": {
-                  "alignAsTable": true,
                   "avg": false,
                   "current": false,
                   "max": false,
                   "min": false,
-                  "rightSide": true,
                   "show": true,
                   "total": false,
                   "values": false
@@ -932,7 +894,6 @@
                   {
                      "expr": "sum(irate(container_network_receive_bytes_total{job=\"cadvisor\", cluster=\"$cluster\", namespace=\"$namespace\", pod=~\"$pod\"}[$__rate_interval])) by (pod)",
                      "format": "time_series",
-                     "intervalFactor": 2,
                      "legendFormat": "{{pod}}",
                      "legendLink": null
                   }
@@ -942,7 +903,7 @@
                "timeShift": null,
                "title": "Receive Bandwidth",
                "tooltip": {
-                  "shared": false,
+                  "shared": true,
                   "sort": 2,
                   "value_type": "individual"
                },
@@ -981,14 +942,11 @@
                "datasource": "$datasource",
                "fill": 10,
                "id": 7,
-               "interval": "1m",
                "legend": {
-                  "alignAsTable": true,
                   "avg": false,
                   "current": false,
                   "max": false,
                   "min": false,
-                  "rightSide": true,
                   "show": true,
                   "total": false,
                   "values": false
@@ -1010,7 +968,6 @@
                   {
                      "expr": "sum(irate(container_network_transmit_bytes_total{job=\"cadvisor\", cluster=\"$cluster\", namespace=\"$namespace\", pod=~\"$pod\"}[$__rate_interval])) by (pod)",
                      "format": "time_series",
-                     "intervalFactor": 2,
                      "legendFormat": "{{pod}}",
                      "legendLink": null
                   }
@@ -1020,7 +977,7 @@
                "timeShift": null,
                "title": "Transmit Bandwidth",
                "tooltip": {
-                  "shared": false,
+                  "shared": true,
                   "sort": 2,
                   "value_type": "individual"
                },
@@ -1071,14 +1028,11 @@
                "datasource": "$datasource",
                "fill": 10,
                "id": 8,
-               "interval": "1m",
                "legend": {
-                  "alignAsTable": true,
                   "avg": false,
                   "current": false,
                   "max": false,
                   "min": false,
-                  "rightSide": true,
                   "show": true,
                   "total": false,
                   "values": false
@@ -1100,7 +1054,6 @@
                   {
                      "expr": "sum(irate(container_network_receive_packets_total{job=\"cadvisor\", cluster=\"$cluster\", namespace=\"$namespace\", pod=~\"$pod\"}[$__rate_interval])) by (pod)",
                      "format": "time_series",
-                     "intervalFactor": 2,
                      "legendFormat": "{{pod}}",
                      "legendLink": null
                   }
@@ -1110,7 +1063,7 @@
                "timeShift": null,
                "title": "Rate of Received Packets",
                "tooltip": {
-                  "shared": false,
+                  "shared": true,
                   "sort": 2,
                   "value_type": "individual"
                },
@@ -1149,14 +1102,11 @@
                "datasource": "$datasource",
                "fill": 10,
                "id": 9,
-               "interval": "1m",
                "legend": {
-                  "alignAsTable": true,
                   "avg": false,
                   "current": false,
                   "max": false,
                   "min": false,
-                  "rightSide": true,
                   "show": true,
                   "total": false,
                   "values": false
@@ -1178,7 +1128,6 @@
                   {
                      "expr": "sum(irate(container_network_transmit_packets_total{job=\"cadvisor\", cluster=\"$cluster\", namespace=\"$namespace\", pod=~\"$pod\"}[$__rate_interval])) by (pod)",
                      "format": "time_series",
-                     "intervalFactor": 2,
                      "legendFormat": "{{pod}}",
                      "legendLink": null
                   }
@@ -1188,7 +1137,7 @@
                "timeShift": null,
                "title": "Rate of Transmitted Packets",
                "tooltip": {
-                  "shared": false,
+                  "shared": true,
                   "sort": 2,
                   "value_type": "individual"
                },
@@ -1239,14 +1188,11 @@
                "datasource": "$datasource",
                "fill": 10,
                "id": 10,
-               "interval": "1m",
                "legend": {
-                  "alignAsTable": true,
                   "avg": false,
                   "current": false,
                   "max": false,
                   "min": false,
-                  "rightSide": true,
                   "show": true,
                   "total": false,
                   "values": false
@@ -1268,7 +1214,6 @@
                   {
                      "expr": "sum(irate(container_network_receive_packets_dropped_total{job=\"cadvisor\", cluster=\"$cluster\", namespace=\"$namespace\", pod=~\"$pod\"}[$__rate_interval])) by (pod)",
                      "format": "time_series",
-                     "intervalFactor": 2,
                      "legendFormat": "{{pod}}",
                      "legendLink": null
                   }
@@ -1278,7 +1223,7 @@
                "timeShift": null,
                "title": "Rate of Received Packets Dropped",
                "tooltip": {
-                  "shared": false,
+                  "shared": true,
                   "sort": 2,
                   "value_type": "individual"
                },
@@ -1317,14 +1262,11 @@
                "datasource": "$datasource",
                "fill": 10,
                "id": 11,
-               "interval": "1m",
                "legend": {
-                  "alignAsTable": true,
                   "avg": false,
                   "current": false,
                   "max": false,
                   "min": false,
-                  "rightSide": true,
                   "show": true,
                   "total": false,
                   "values": false
@@ -1346,7 +1288,6 @@
                   {
                      "expr": "sum(irate(container_network_transmit_packets_dropped_total{job=\"cadvisor\", cluster=\"$cluster\", namespace=\"$namespace\", pod=~\"$pod\"}[$__rate_interval])) by (pod)",
                      "format": "time_series",
-                     "intervalFactor": 2,
                      "legendFormat": "{{pod}}",
                      "legendLink": null
                   }
@@ -1356,7 +1297,7 @@
                "timeShift": null,
                "title": "Rate of Transmitted Packets Dropped",
                "tooltip": {
-                  "shared": false,
+                  "shared": true,
                   "sort": 2,
                   "value_type": "individual"
                },
@@ -1408,14 +1349,11 @@
                "decimals": -1,
                "fill": 10,
                "id": 12,
-               "interval": "1m",
                "legend": {
-                  "alignAsTable": true,
                   "avg": false,
                   "current": false,
                   "max": false,
                   "min": false,
-                  "rightSide": true,
                   "show": true,
                   "total": false,
                   "values": false
@@ -1437,14 +1375,12 @@
                   {
                      "expr": "ceil(sum by(pod) (rate(container_fs_reads_total{job=\"cadvisor\", device=~\"(/dev.+)|mmcblk.p.+|nvme.+|rbd.+|sd.+|vd.+|xvd.+|dm-.+|dasd.+\", container!=\"\", cluster=\"$cluster\", namespace=\"$namespace\", pod=~\"$pod\"}[$__rate_interval])))",
                      "format": "time_series",
-                     "intervalFactor": 2,
                      "legendFormat": "Reads",
                      "legendLink": null
                   },
                   {
                      "expr": "ceil(sum by(pod) (rate(container_fs_writes_total{job=\"cadvisor\", device=~\"(/dev.+)|mmcblk.p.+|nvme.+|rbd.+|sd.+|vd.+|xvd.+|dm-.+|dasd.+\", container!=\"\", cluster=\"$cluster\",namespace=\"$namespace\", pod=~\"$pod\"}[$__rate_interval])))",
                      "format": "time_series",
-                     "intervalFactor": 2,
                      "legendFormat": "Writes",
                      "legendLink": null
                   }
@@ -1454,7 +1390,7 @@
                "timeShift": null,
                "title": "IOPS",
                "tooltip": {
-                  "shared": false,
+                  "shared": true,
                   "sort": 2,
                   "value_type": "individual"
                },
@@ -1493,14 +1429,11 @@
                "datasource": "$datasource",
                "fill": 10,
                "id": 13,
-               "interval": "1m",
                "legend": {
-                  "alignAsTable": true,
                   "avg": false,
                   "current": false,
                   "max": false,
                   "min": false,
-                  "rightSide": true,
                   "show": true,
                   "total": false,
                   "values": false
@@ -1522,14 +1455,12 @@
                   {
                      "expr": "sum by(pod) (rate(container_fs_reads_bytes_total{job=\"cadvisor\", device=~\"(/dev.+)|mmcblk.p.+|nvme.+|rbd.+|sd.+|vd.+|xvd.+|dm-.+|dasd.+\", container!=\"\", cluster=\"$cluster\", namespace=\"$namespace\", pod=~\"$pod\"}[$__rate_interval]))",
                      "format": "time_series",
-                     "intervalFactor": 2,
                      "legendFormat": "Reads",
                      "legendLink": null
                   },
                   {
                      "expr": "sum by(pod) (rate(container_fs_writes_bytes_total{job=\"cadvisor\", device=~\"(/dev.+)|mmcblk.p.+|nvme.+|rbd.+|sd.+|vd.+|xvd.+|dm-.+|dasd.+\", container!=\"\", cluster=\"$cluster\", namespace=\"$namespace\", pod=~\"$pod\"}[$__rate_interval]))",
                      "format": "time_series",
-                     "intervalFactor": 2,
                      "legendFormat": "Writes",
                      "legendLink": null
                   }
@@ -1539,7 +1470,7 @@
                "timeShift": null,
                "title": "ThroughPut",
                "tooltip": {
-                  "shared": false,
+                  "shared": true,
                   "sort": 2,
                   "value_type": "individual"
                },
@@ -1591,14 +1522,11 @@
                "decimals": -1,
                "fill": 10,
                "id": 14,
-               "interval": "1m",
                "legend": {
-                  "alignAsTable": true,
                   "avg": false,
                   "current": false,
                   "max": false,
                   "min": false,
-                  "rightSide": true,
                   "show": true,
                   "total": false,
                   "values": false
@@ -1620,7 +1548,6 @@
                   {
                      "expr": "ceil(sum by(container) (rate(container_fs_reads_total{job=\"cadvisor\", container!=\"\", cluster=\"$cluster\", namespace=\"$namespace\", pod=\"$pod\"}[$__rate_interval]) + rate(container_fs_writes_total{job=\"cadvisor\", container!=\"\", cluster=\"$cluster\", namespace=\"$namespace\", pod=\"$pod\"}[$__rate_interval])))",
                      "format": "time_series",
-                     "intervalFactor": 2,
                      "legendFormat": "{{container}}",
                      "legendLink": null
                   }
@@ -1630,7 +1557,7 @@
                "timeShift": null,
                "title": "IOPS(Reads+Writes)",
                "tooltip": {
-                  "shared": false,
+                  "shared": true,
                   "sort": 2,
                   "value_type": "individual"
                },
@@ -1669,14 +1596,11 @@
                "datasource": "$datasource",
                "fill": 10,
                "id": 15,
-               "interval": "1m",
                "legend": {
-                  "alignAsTable": true,
                   "avg": false,
                   "current": false,
                   "max": false,
                   "min": false,
-                  "rightSide": true,
                   "show": true,
                   "total": false,
                   "values": false
@@ -1698,7 +1622,6 @@
                   {
                      "expr": "sum by(container) (rate(container_fs_reads_bytes_total{job=\"cadvisor\", container!=\"\", cluster=\"$cluster\", namespace=\"$namespace\", pod=\"$pod\"}[$__rate_interval]) + rate(container_fs_writes_bytes_total{job=\"cadvisor\", container!=\"\", cluster=\"$cluster\", namespace=\"$namespace\", pod=\"$pod\"}[$__rate_interval]))",
                      "format": "time_series",
-                     "intervalFactor": 2,
                      "legendFormat": "{{container}}",
                      "legendLink": null
                   }
@@ -1708,7 +1631,7 @@
                "timeShift": null,
                "title": "ThroughPut(Read+Write)",
                "tooltip": {
-                  "shared": false,
+                  "shared": true,
                   "sort": 2,
                   "value_type": "individual"
                },
@@ -1759,14 +1682,11 @@
                "datasource": "$datasource",
                "fill": 1,
                "id": 16,
-               "interval": "1m",
                "legend": {
-                  "alignAsTable": true,
                   "avg": false,
                   "current": false,
                   "max": false,
                   "min": false,
-                  "rightSide": true,
                   "show": true,
                   "total": false,
                   "values": false
@@ -1800,7 +1720,7 @@
                      "colorMode": null,
                      "colors": [ ],
                      "dateFormat": "YYYY-MM-DD HH:mm:ss",
-                     "decimals": -1,
+                     "decimals": 3,
                      "link": false,
                      "linkTargetBlank": false,
                      "linkTooltip": "Drill down",
@@ -1808,14 +1728,14 @@
                      "pattern": "Value #A",
                      "thresholds": [ ],
                      "type": "number",
-                     "unit": "short"
+                     "unit": "iops"
                   },
                   {
                      "alias": "IOPS(Writes)",
                      "colorMode": null,
                      "colors": [ ],
                      "dateFormat": "YYYY-MM-DD HH:mm:ss",
-                     "decimals": -1,
+                     "decimals": 3,
                      "link": false,
                      "linkTargetBlank": false,
                      "linkTooltip": "Drill down",
@@ -1823,14 +1743,14 @@
                      "pattern": "Value #B",
                      "thresholds": [ ],
                      "type": "number",
-                     "unit": "short"
+                     "unit": "iops"
                   },
                   {
                      "alias": "IOPS(Reads + Writes)",
                      "colorMode": null,
                      "colors": [ ],
                      "dateFormat": "YYYY-MM-DD HH:mm:ss",
-                     "decimals": -1,
+                     "decimals": 3,
                      "link": false,
                      "linkTargetBlank": false,
                      "linkTooltip": "Drill down",
@@ -1838,7 +1758,7 @@
                      "pattern": "Value #C",
                      "thresholds": [ ],
                      "type": "number",
-                     "unit": "short"
+                     "unit": "iops"
                   },
                   {
                      "alias": "Throughput(Read)",
@@ -1917,7 +1837,6 @@
                      "expr": "sum by(container) (rate(container_fs_reads_total{job=\"cadvisor\", device=~\"(/dev.+)|mmcblk.p.+|nvme.+|rbd.+|sd.+|vd.+|xvd.+|dm-.+|dasd.+\", container!=\"\", cluster=\"$cluster\", namespace=\"$namespace\", pod=\"$pod\"}[$__rate_interval]))",
                      "format": "table",
                      "instant": true,
-                     "intervalFactor": 2,
                      "legendFormat": "",
                      "refId": "A"
                   },
@@ -1925,7 +1844,6 @@
                      "expr": "sum by(container) (rate(container_fs_writes_total{job=\"cadvisor\",device=~\"(/dev.+)|mmcblk.p.+|nvme.+|rbd.+|sd.+|vd.+|xvd.+|dm-.+|dasd.+\", container!=\"\", cluster=\"$cluster\", namespace=\"$namespace\", pod=\"$pod\"}[$__rate_interval]))",
                      "format": "table",
                      "instant": true,
-                     "intervalFactor": 2,
                      "legendFormat": "",
                      "refId": "B"
                   },
@@ -1933,7 +1851,6 @@
                      "expr": "sum by(container) (rate(container_fs_reads_total{job=\"cadvisor\", device=~\"(/dev.+)|mmcblk.p.+|nvme.+|rbd.+|sd.+|vd.+|xvd.+|dm-.+|dasd.+\", container!=\"\", cluster=\"$cluster\", namespace=\"$namespace\", pod=\"$pod\"}[$__rate_interval]) + rate(container_fs_writes_total{job=\"cadvisor\", device=~\"(/dev.+)|mmcblk.p.+|nvme.+|rbd.+|sd.+|vd.+|xvd.+|dm-.+|dasd.+\", container!=\"\", cluster=\"$cluster\", namespace=\"$namespace\", pod=\"$pod\"}[$__rate_interval]))",
                      "format": "table",
                      "instant": true,
-                     "intervalFactor": 2,
                      "legendFormat": "",
                      "refId": "C"
                   },
@@ -1941,7 +1858,6 @@
                      "expr": "sum by(container) (rate(container_fs_reads_bytes_total{job=\"cadvisor\", device=~\"(/dev.+)|mmcblk.p.+|nvme.+|rbd.+|sd.+|vd.+|xvd.+|dm-.+|dasd.+\", container!=\"\", cluster=\"$cluster\", namespace=\"$namespace\", pod=\"$pod\"}[$__rate_interval]))",
                      "format": "table",
                      "instant": true,
-                     "intervalFactor": 2,
                      "legendFormat": "",
                      "refId": "D"
                   },
@@ -1949,7 +1865,6 @@
                      "expr": "sum by(container) (rate(container_fs_writes_bytes_total{job=\"cadvisor\", device=~\"(/dev.+)|mmcblk.p.+|nvme.+|rbd.+|sd.+|vd.+|xvd.+|dm-.+|dasd.+\", container!=\"\", cluster=\"$cluster\", namespace=\"$namespace\", pod=\"$pod\"}[$__rate_interval]))",
                      "format": "table",
                      "instant": true,
-                     "intervalFactor": 2,
                      "legendFormat": "",
                      "refId": "E"
                   },
@@ -1957,7 +1872,6 @@
                      "expr": "sum by(container) (rate(container_fs_reads_bytes_total{job=\"cadvisor\", device=~\"(/dev.+)|mmcblk.p.+|nvme.+|rbd.+|sd.+|vd.+|xvd.+|dm-.+|dasd.+\", container!=\"\", cluster=\"$cluster\", namespace=\"$namespace\", pod=\"$pod\"}[$__rate_interval]) + rate(container_fs_writes_bytes_total{job=\"cadvisor\", device=~\"(/dev.+)|mmcblk.p.+|nvme.+|rbd.+|sd.+|vd.+|xvd.+|dm-.+|dasd.+\", container!=\"\", cluster=\"$cluster\", namespace=\"$namespace\", pod=\"$pod\"}[$__rate_interval]))",
                      "format": "table",
                      "instant": true,
-                     "intervalFactor": 2,
                      "legendFormat": "",
                      "refId": "F"
                   }
@@ -1967,7 +1881,7 @@
                "timeShift": null,
                "title": "Current Storage IO",
                "tooltip": {
-                  "shared": false,
+                  "shared": true,
                   "sort": 2,
                   "value_type": "individual"
                },
@@ -2021,7 +1935,7 @@
                "value": "default"
             },
             "hide": 0,
-            "label": "Data Source",
+            "label": "Data source",
             "name": "datasource",
             "options": [ ],
             "query": "prometheus",

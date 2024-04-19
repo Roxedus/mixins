@@ -2574,7 +2574,7 @@
                "steppedLine": false,
                "targets": [
                   {
-                     "expr": "cortex_bucket_store_blocks_loaded{component=\"store-gateway\",cluster=~\"$cluster\", job=~\"($namespace)/(store-gateway|cortex$)\"}",
+                     "expr": "sum(cortex_bucket_store_blocks_loaded{component=\"store-gateway\",cluster=~\"$cluster\", job=~\"($namespace)/(store-gateway|cortex$)\"}) without (user)",
                      "format": "time_series",
                      "interval": "15s",
                      "intervalFactor": 2,
