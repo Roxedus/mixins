@@ -65,23 +65,6 @@ labels:
   severity: warning
 {{< /code >}}
  
-##### CortexTableSyncFailure
-
-{{< code lang="yaml" >}}
-alert: CortexTableSyncFailure
-annotations:
-  message: |
-    {{ $labels.job }} is experiencing {{ printf "%.2f" $value }}% errors syncing tables.
-expr: |
-  100 * rate(cortex_table_manager_sync_duration_seconds_count{status_code!~"2.."}[15m])
-    /
-  rate(cortex_table_manager_sync_duration_seconds_count[15m])
-    > 10
-for: 30m
-labels:
-  severity: critical
-{{< /code >}}
- 
 ##### CortexQueriesIncorrect
 
 {{< code lang="yaml" >}}
@@ -181,36 +164,6 @@ annotations:
     {{ $labels.job }}/{{ $labels.instance }} has restarted {{ printf "%.2f" $value }} times in the last 30 mins.
 expr: |
   changes(process_start_time_seconds{job=~".+(cortex|ingester.*)"}[30m]) >= 2
-labels:
-  severity: warning
-{{< /code >}}
- 
-##### CortexTransferFailed
-
-{{< code lang="yaml" >}}
-alert: CortexTransferFailed
-annotations:
-  message: |
-    {{ $labels.job }}/{{ $labels.instance }} transfer failed.
-expr: |
-  max_over_time(cortex_shutdown_duration_seconds_count{op="transfer",status!="success"}[15m])
-for: 5m
-labels:
-  severity: critical
-{{< /code >}}
- 
-##### CortexOldChunkInMemory
-
-{{< code lang="yaml" >}}
-alert: CortexOldChunkInMemory
-annotations:
-  message: |
-    {{ $labels.job }}/{{ $labels.instance }} has very old unflushed chunk in memory.
-expr: |
-  (time() - cortex_oldest_unflushed_chunk_timestamp_seconds > 36000)
-    and
-  (cortex_oldest_unflushed_chunk_timestamp_seconds > 0)
-for: 5m
 labels:
   severity: warning
 {{< /code >}}
@@ -341,73 +294,6 @@ labels:
   severity: critical
 {{< /code >}}
  
-### cortex_wal_alerts
-
-##### CortexWALCorruption
-
-{{< code lang="yaml" >}}
-alert: CortexWALCorruption
-annotations:
-  message: |
-    {{ $labels.job }}/{{ $labels.instance }} has a corrupted WAL or checkpoint.
-expr: |
-  increase(cortex_ingester_wal_corruptions_total[5m]) > 0
-labels:
-  severity: critical
-{{< /code >}}
- 
-##### CortexCheckpointCreationFailed
-
-{{< code lang="yaml" >}}
-alert: CortexCheckpointCreationFailed
-annotations:
-  message: |
-    {{ $labels.job }}/{{ $labels.instance }} failed to create checkpoint.
-expr: |
-  increase(cortex_ingester_checkpoint_creations_failed_total[10m]) > 0
-labels:
-  severity: warning
-{{< /code >}}
- 
-##### CortexCheckpointCreationFailed
-
-{{< code lang="yaml" >}}
-alert: CortexCheckpointCreationFailed
-annotations:
-  message: |
-    {{ $labels.job }}/{{ $labels.instance }} is failing to create checkpoint.
-expr: |
-  increase(cortex_ingester_checkpoint_creations_failed_total[1h]) > 1
-labels:
-  severity: critical
-{{< /code >}}
- 
-##### CortexCheckpointDeletionFailed
-
-{{< code lang="yaml" >}}
-alert: CortexCheckpointDeletionFailed
-annotations:
-  message: |
-    {{ $labels.job }}/{{ $labels.instance }} failed to delete checkpoint.
-expr: |
-  increase(cortex_ingester_checkpoint_deletions_failed_total[10m]) > 0
-labels:
-  severity: warning
-{{< /code >}}
- 
-##### CortexCheckpointDeletionFailed
-
-{{< code lang="yaml" >}}
-alert: CortexCheckpointDeletionFailed
-annotations:
-  message: |
-    {{ $labels.instance }} is failing to delete checkpoint.
-expr: |
-  increase(cortex_ingester_checkpoint_deletions_failed_total[2h]) > 1
-labels:
-  severity: critical
-{{< /code >}}
- 
 ### cortex-rollout-alerts
 
 ##### CortexRolloutStuck
@@ -466,28 +352,6 @@ labels:
  
 ### cortex-provisioning
 
-##### CortexProvisioningMemcachedTooSmall
-
-{{< code lang="yaml" >}}
-alert: CortexProvisioningMemcachedTooSmall
-annotations:
-  message: |
-    Chunk memcached cluster in {{ $labels.cluster }}/{{ $labels.namespace }} is too small, should be at least {{ printf "%.2f" $value }}GB.
-expr: |
-  (
-    4 *
-    sum by (cluster, namespace) (cortex_ingester_memory_series * cortex_ingester_chunk_size_bytes_sum / cortex_ingester_chunk_size_bytes_count)
-     / 1e9
-  )
-    >
-  (
-    sum by (cluster, namespace) (memcached_limit_bytes{job=~".+/memcached"}) / 1e9
-  )
-for: 15m
-labels:
-  severity: warning
-{{< /code >}}
- 
 ##### CortexProvisioningTooManyActiveSeries
 
 {{< code lang="yaml" >}}
