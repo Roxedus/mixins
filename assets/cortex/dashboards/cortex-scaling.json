@@ -175,10 +175,8 @@
                      "expr": "sort_desc(\n  cluster_namespace_deployment_reason:required_replicas:count{cluster=~\"$cluster\", namespace=~\"$namespace\"}\n    > ignoring(reason) group_left\n  cluster_namespace_deployment:actual_replicas:count{cluster=~\"$cluster\", namespace=~\"$namespace\"}\n)\n",
                      "format": "table",
                      "instant": true,
-                     "intervalFactor": 2,
                      "legendFormat": "",
-                     "refId": "A",
-                     "step": 10
+                     "refId": "A"
                   }
                ],
                "thresholds": [ ],
@@ -186,8 +184,8 @@
                "timeShift": null,
                "title": "Workload-based scaling",
                "tooltip": {
-                  "shared": false,
-                  "sort": 0,
+                  "shared": true,
+                  "sort": 2,
                   "value_type": "individual"
                },
                "transform": "table",
@@ -240,7 +238,7 @@
                "value": "default"
             },
             "hide": 0,
-            "label": null,
+            "label": "Data source",
             "name": "datasource",
             "options": [ ],
             "query": "prometheus",

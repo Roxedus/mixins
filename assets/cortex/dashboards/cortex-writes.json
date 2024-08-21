@@ -85,7 +85,6 @@
                      "expr": "sum(cluster_namespace_job:cortex_distributor_received_samples:rate5m{cluster=~\"$cluster\", job=~\"($namespace)/(distributor|cortex$)\"})",
                      "format": "time_series",
                      "instant": true,
-                     "intervalFactor": 2,
                      "refId": "A"
                   }
                ],
@@ -94,8 +93,8 @@
                "timeShift": null,
                "title": "Samples / sec",
                "tooltip": {
-                  "shared": false,
-                  "sort": 0,
+                  "shared": true,
+                  "sort": 2,
                   "value_type": "individual"
                },
                "type": "singlestat",
@@ -161,7 +160,6 @@
                      "expr": "sum(cortex_ingester_memory_series{cluster=~\"$cluster\", job=~\"($namespace)/(ingester.*|cortex$)\"}\n/ on(cluster, namespace) group_left\nmax by (cluster, namespace) (cortex_distributor_replication_factor{cluster=~\"$cluster\", job=~\"($namespace)/(distributor|cortex$)\"}))\n",
                      "format": "time_series",
                      "instant": true,
-                     "intervalFactor": 2,
                      "refId": "A"
                   }
                ],
@@ -170,8 +168,8 @@
                "timeShift": null,
                "title": "Active Series",
                "tooltip": {
-                  "shared": false,
-                  "sort": 0,
+                  "shared": true,
+                  "sort": 2,
                   "value_type": "individual"
                },
                "type": "singlestat",
@@ -237,7 +235,6 @@
                      "expr": "count(count by(user) (cortex_ingester_active_series{cluster=~\"$cluster\", job=~\"($namespace)/(ingester.*|cortex$)\"}))",
                      "format": "time_series",
                      "instant": true,
-                     "intervalFactor": 2,
                      "refId": "A"
                   }
                ],
@@ -246,8 +243,8 @@
                "timeShift": null,
                "title": "Tenants",
                "tooltip": {
-                  "shared": false,
-                  "sort": 0,
+                  "shared": true,
+                  "sort": 2,
                   "value_type": "individual"
                },
                "type": "singlestat",
@@ -313,7 +310,6 @@
                      "expr": "sum(rate(cortex_request_duration_seconds_count{cluster=~\"$cluster\", job=~\"($namespace)/(gateway|cortex-gw|cortex-gw-internal)\", route=~\"api_(v1|prom)_push\"}[5m]))",
                      "format": "time_series",
                      "instant": true,
-                     "intervalFactor": 2,
                      "refId": "A"
                   }
                ],
@@ -322,8 +318,8 @@
                "timeShift": null,
                "title": "Requests / sec",
                "tooltip": {
-                  "shared": false,
-                  "sort": 0,
+                  "shared": true,
+                  "sort": 2,
                   "value_type": "individual"
                },
                "type": "singlestat",
@@ -372,6 +368,8 @@
                   "3xx": "#6ED0E0",
                   "4xx": "#EF843C",
                   "5xx": "#E24D42",
+                  "OK": "#7EB26D",
+                  "cancel": "#A9A9A9",
                   "error": "#E24D42",
                   "success": "#7EB26D"
                },
@@ -405,13 +403,11 @@
                "steppedLine": false,
                "targets": [
                   {
-                     "expr": "sum by (status) (\n  label_replace(label_replace(rate(cortex_request_duration_seconds_count{cluster=~\"$cluster\", job=~\"($namespace)/(gateway|cortex-gw|cortex-gw-internal)\", route=~\"api_(v1|prom)_push\"}[$__rate_interval]),\n  \"status\", \"${1}xx\", \"status_code\", \"([0-9])..\"),\n  \"status\", \"${1}\", \"status_code\", \"([a-z]+)\"))\n",
+                     "expr": "sum by (status) (\n  label_replace(label_replace(rate(cortex_request_duration_seconds_count{cluster=~\"$cluster\", job=~\"($namespace)/(gateway|cortex-gw|cortex-gw-internal)\", route=~\"api_(v1|prom)_push\"}[$__rate_interval]),\n  \"status\", \"${1}xx\", \"status_code\", \"([0-9])..\"),\n  \"status\", \"${1}\", \"status_code\", \"([a-zA-Z]+)\"))\n",
                      "format": "time_series",
                      "interval": "15s",
-                     "intervalFactor": 2,
                      "legendFormat": "{{status}}",
-                     "refId": "A",
-                     "step": 10
+                     "refId": "A"
                   }
                ],
                "thresholds": [ ],
@@ -419,8 +415,8 @@
                "timeShift": null,
                "title": "Requests / sec",
                "tooltip": {
-                  "shared": false,
-                  "sort": 0,
+                  "shared": true,
+                  "sort": 2,
                   "value_type": "individual"
                },
                "type": "graph",
@@ -484,26 +480,20 @@
                   {
                      "expr": "histogram_quantile(0.99, sum by (le) (cluster_job_route:cortex_request_duration_seconds_bucket:sum_rate{cluster=~\"$cluster\", job=~\"($namespace)/(gateway|cortex-gw|cortex-gw-internal)\", route=~\"api_(v1|prom)_push\"})) * 1e3",
                      "format": "time_series",
-                     "intervalFactor": 2,
-                     "legendFormat": "99th Percentile",
-                     "refId": "A",
-                     "step": 10
+                     "legendFormat": "99th percentile",
+                     "refId": "A"
                   },
                   {
                      "expr": "histogram_quantile(0.50, sum by (le) (cluster_job_route:cortex_request_duration_seconds_bucket:sum_rate{cluster=~\"$cluster\", job=~\"($namespace)/(gateway|cortex-gw|cortex-gw-internal)\", route=~\"api_(v1|prom)_push\"})) * 1e3",
                      "format": "time_series",
-                     "intervalFactor": 2,
-                     "legendFormat": "50th Percentile",
-                     "refId": "B",
-                     "step": 10
+                     "legendFormat": "50th percentile",
+                     "refId": "B"
                   },
                   {
                      "expr": "1e3 * sum(cluster_job_route:cortex_request_duration_seconds_sum:sum_rate{cluster=~\"$cluster\", job=~\"($namespace)/(gateway|cortex-gw|cortex-gw-internal)\", route=~\"api_(v1|prom)_push\"}) / sum(cluster_job_route:cortex_request_duration_seconds_count:sum_rate{cluster=~\"$cluster\", job=~\"($namespace)/(gateway|cortex-gw|cortex-gw-internal)\", route=~\"api_(v1|prom)_push\"})",
                      "format": "time_series",
-                     "intervalFactor": 2,
                      "legendFormat": "Average",
-                     "refId": "C",
-                     "step": 10
+                     "refId": "C"
                   }
                ],
                "thresholds": [ ],
@@ -511,8 +501,8 @@
                "timeShift": null,
                "title": "Latency",
                "tooltip": {
-                  "shared": false,
-                  "sort": 0,
+                  "shared": true,
+                  "sort": 2,
                   "value_type": "individual"
                },
                "type": "graph",
@@ -571,10 +561,8 @@
                      "expr": "histogram_quantile(0.99, sum by(le, pod) (rate(cortex_request_duration_seconds_bucket{cluster=~\"$cluster\", job=~\"($namespace)/(gateway|cortex-gw|cortex-gw-internal)\", route=~\"api_(v1|prom)_push\"}[$__rate_interval])))",
                      "format": "time_series",
                      "interval": "15s",
-                     "intervalFactor": 2,
                      "legendFormat": "",
-                     "legendLink": null,
-                     "step": 10
+                     "legendLink": null
                   }
                ],
                "thresholds": [ ],
@@ -630,6 +618,8 @@
                   "3xx": "#6ED0E0",
                   "4xx": "#EF843C",
                   "5xx": "#E24D42",
+                  "OK": "#7EB26D",
+                  "cancel": "#A9A9A9",
                   "error": "#E24D42",
                   "success": "#7EB26D"
                },
@@ -663,13 +653,11 @@
                "steppedLine": false,
                "targets": [
                   {
-                     "expr": "sum by (status) (\n  label_replace(label_replace(rate(cortex_request_duration_seconds_count{cluster=~\"$cluster\", job=~\"($namespace)/(distributor|cortex$)\", route=~\"/distributor.Distributor/Push|/httpgrpc.*|api_(v1|prom)_push\"}[$__rate_interval]),\n  \"status\", \"${1}xx\", \"status_code\", \"([0-9])..\"),\n  \"status\", \"${1}\", \"status_code\", \"([a-z]+)\"))\n",
+                     "expr": "sum by (status) (\n  label_replace(label_replace(rate(cortex_request_duration_seconds_count{cluster=~\"$cluster\", job=~\"($namespace)/(distributor|cortex$)\", route=~\"/distributor.Distributor/Push|/httpgrpc.*|api_(v1|prom)_push\"}[$__rate_interval]),\n  \"status\", \"${1}xx\", \"status_code\", \"([0-9])..\"),\n  \"status\", \"${1}\", \"status_code\", \"([a-zA-Z]+)\"))\n",
                      "format": "time_series",
                      "interval": "15s",
-                     "intervalFactor": 2,
                      "legendFormat": "{{status}}",
-                     "refId": "A",
-                     "step": 10
+                     "refId": "A"
                   }
                ],
                "thresholds": [ ],
@@ -677,8 +665,8 @@
                "timeShift": null,
                "title": "Requests / sec",
                "tooltip": {
-                  "shared": false,
-                  "sort": 0,
+                  "shared": true,
+                  "sort": 2,
                   "value_type": "individual"
                },
                "type": "graph",
@@ -742,26 +730,20 @@
                   {
                      "expr": "histogram_quantile(0.99, sum by (le) (cluster_job_route:cortex_request_duration_seconds_bucket:sum_rate{cluster=~\"$cluster\", job=~\"($namespace)/(distributor|cortex$)\", route=~\"/distributor.Distributor/Push|/httpgrpc.*|api_(v1|prom)_push\"})) * 1e3",
                      "format": "time_series",
-                     "intervalFactor": 2,
-                     "legendFormat": "99th Percentile",
-                     "refId": "A",
-                     "step": 10
+                     "legendFormat": "99th percentile",
+                     "refId": "A"
                   },
                   {
                      "expr": "histogram_quantile(0.50, sum by (le) (cluster_job_route:cortex_request_duration_seconds_bucket:sum_rate{cluster=~\"$cluster\", job=~\"($namespace)/(distributor|cortex$)\", route=~\"/distributor.Distributor/Push|/httpgrpc.*|api_(v1|prom)_push\"})) * 1e3",
                      "format": "time_series",
-                     "intervalFactor": 2,
-                     "legendFormat": "50th Percentile",
-                     "refId": "B",
-                     "step": 10
+                     "legendFormat": "50th percentile",
+                     "refId": "B"
                   },
                   {
                      "expr": "1e3 * sum(cluster_job_route:cortex_request_duration_seconds_sum:sum_rate{cluster=~\"$cluster\", job=~\"($namespace)/(distributor|cortex$)\", route=~\"/distributor.Distributor/Push|/httpgrpc.*|api_(v1|prom)_push\"}) / sum(cluster_job_route:cortex_request_duration_seconds_count:sum_rate{cluster=~\"$cluster\", job=~\"($namespace)/(distributor|cortex$)\", route=~\"/distributor.Distributor/Push|/httpgrpc.*|api_(v1|prom)_push\"})",
                      "format": "time_series",
-                     "intervalFactor": 2,
                      "legendFormat": "Average",
-                     "refId": "C",
-                     "step": 10
+                     "refId": "C"
                   }
                ],
                "thresholds": [ ],
@@ -769,8 +751,8 @@
                "timeShift": null,
                "title": "Latency",
                "tooltip": {
-                  "shared": false,
-                  "sort": 0,
+                  "shared": true,
+                  "sort": 2,
                   "value_type": "individual"
                },
                "type": "graph",
@@ -829,10 +811,8 @@
                      "expr": "histogram_quantile(0.99, sum by(le, pod) (rate(cortex_request_duration_seconds_bucket{cluster=~\"$cluster\", job=~\"($namespace)/(distributor|cortex$)\", route=~\"/distributor.Distributor/Push|/httpgrpc.*|api_(v1|prom)_push\"}[$__rate_interval])))",
                      "format": "time_series",
                      "interval": "15s",
-                     "intervalFactor": 2,
                      "legendFormat": "",
-                     "legendLink": null,
-                     "step": 10
+                     "legendLink": null
                   }
                ],
                "thresholds": [ ],
@@ -888,6 +868,8 @@
                   "3xx": "#6ED0E0",
                   "4xx": "#EF843C",
                   "5xx": "#E24D42",
+                  "OK": "#7EB26D",
+                  "cancel": "#A9A9A9",
                   "error": "#E24D42",
                   "success": "#7EB26D"
                },
@@ -921,13 +903,11 @@
                "steppedLine": false,
                "targets": [
                   {
-                     "expr": "sum by (status) (\n  label_replace(label_replace(rate(cortex_kv_request_duration_seconds_count{cluster=~\"$cluster\", job=~\"($namespace)/(distributor|cortex$)\"}[$__rate_interval]),\n  \"status\", \"${1}xx\", \"status_code\", \"([0-9])..\"),\n  \"status\", \"${1}\", \"status_code\", \"([a-z]+)\"))\n",
+                     "expr": "sum by (status) (\n  label_replace(label_replace(rate(cortex_kv_request_duration_seconds_count{cluster=~\"$cluster\", job=~\"($namespace)/(distributor|cortex$)\"}[$__rate_interval]),\n  \"status\", \"${1}xx\", \"status_code\", \"([0-9])..\"),\n  \"status\", \"${1}\", \"status_code\", \"([a-zA-Z]+)\"))\n",
                      "format": "time_series",
                      "interval": "15s",
-                     "intervalFactor": 2,
                      "legendFormat": "{{status}}",
-                     "refId": "A",
-                     "step": 10
+                     "refId": "A"
                   }
                ],
                "thresholds": [ ],
@@ -935,8 +915,8 @@
                "timeShift": null,
                "title": "Requests / sec",
                "tooltip": {
-                  "shared": false,
-                  "sort": 0,
+                  "shared": true,
+                  "sort": 2,
                   "value_type": "individual"
                },
                "type": "graph",
@@ -1000,26 +980,20 @@
                   {
                      "expr": "histogram_quantile(0.99, sum by (le) (cluster_job:cortex_kv_request_duration_seconds_bucket:sum_rate{cluster=~\"$cluster\", job=~\"($namespace)/(distributor|cortex$)\"})) * 1e3",
                      "format": "time_series",
-                     "intervalFactor": 2,
-                     "legendFormat": "99th Percentile",
-                     "refId": "A",
-                     "step": 10
+                     "legendFormat": "99th percentile",
+                     "refId": "A"
                   },
                   {
                      "expr": "histogram_quantile(0.50, sum by (le) (cluster_job:cortex_kv_request_duration_seconds_bucket:sum_rate{cluster=~\"$cluster\", job=~\"($namespace)/(distributor|cortex$)\"})) * 1e3",
                      "format": "time_series",
-                     "intervalFactor": 2,
-                     "legendFormat": "50th Percentile",
-                     "refId": "B",
-                     "step": 10
+                     "legendFormat": "50th percentile",
+                     "refId": "B"
                   },
                   {
                      "expr": "1e3 * sum(cluster_job:cortex_kv_request_duration_seconds_sum:sum_rate{cluster=~\"$cluster\", job=~\"($namespace)/(distributor|cortex$)\"}) / sum(cluster_job:cortex_kv_request_duration_seconds_count:sum_rate{cluster=~\"$cluster\", job=~\"($namespace)/(distributor|cortex$)\"})",
                      "format": "time_series",
-                     "intervalFactor": 2,
                      "legendFormat": "Average",
-                     "refId": "C",
-                     "step": 10
+                     "refId": "C"
                   }
                ],
                "thresholds": [ ],
@@ -1027,8 +1001,8 @@
                "timeShift": null,
                "title": "Latency",
                "tooltip": {
-                  "shared": false,
-                  "sort": 0,
+                  "shared": true,
+                  "sort": 2,
                   "value_type": "individual"
                },
                "type": "graph",
@@ -1077,6 +1051,8 @@
                   "3xx": "#6ED0E0",
                   "4xx": "#EF843C",
                   "5xx": "#E24D42",
+                  "OK": "#7EB26D",
+                  "cancel": "#A9A9A9",
                   "error": "#E24D42",
                   "success": "#7EB26D"
                },
@@ -1110,13 +1086,11 @@
                "steppedLine": false,
                "targets": [
                   {
-                     "expr": "sum by (status) (\n  label_replace(label_replace(rate(cortex_request_duration_seconds_count{cluster=~\"$cluster\", job=~\"($namespace)/(ingester.*|cortex$)\",route=\"/cortex.Ingester/Push\"}[$__rate_interval]),\n  \"status\", \"${1}xx\", \"status_code\", \"([0-9])..\"),\n  \"status\", \"${1}\", \"status_code\", \"([a-z]+)\"))\n",
+                     "expr": "sum by (status) (\n  label_replace(label_replace(rate(cortex_request_duration_seconds_count{cluster=~\"$cluster\", job=~\"($namespace)/(ingester.*|cortex$)\",route=\"/cortex.Ingester/Push\"}[$__rate_interval]),\n  \"status\", \"${1}xx\", \"status_code\", \"([0-9])..\"),\n  \"status\", \"${1}\", \"status_code\", \"([a-zA-Z]+)\"))\n",
                      "format": "time_series",
                      "interval": "15s",
-                     "intervalFactor": 2,
                      "legendFormat": "{{status}}",
-                     "refId": "A",
-                     "step": 10
+                     "refId": "A"
                   }
                ],
                "thresholds": [ ],
@@ -1124,8 +1098,8 @@
                "timeShift": null,
                "title": "Requests / sec",
                "tooltip": {
-                  "shared": false,
-                  "sort": 0,
+                  "shared": true,
+                  "sort": 2,
                   "value_type": "individual"
                },
                "type": "graph",
@@ -1189,26 +1163,20 @@
                   {
                      "expr": "histogram_quantile(0.99, sum by (le) (cluster_job_route:cortex_request_duration_seconds_bucket:sum_rate{cluster=~\"$cluster\", job=~\"($namespace)/(ingester.*|cortex$)\", route=\"/cortex.Ingester/Push\"})) * 1e3",
                      "format": "time_series",
-                     "intervalFactor": 2,
-                     "legendFormat": "99th Percentile",
-                     "refId": "A",
-                     "step": 10
+                     "legendFormat": "99th percentile",
+                     "refId": "A"
                   },
                   {
                      "expr": "histogram_quantile(0.50, sum by (le) (cluster_job_route:cortex_request_duration_seconds_bucket:sum_rate{cluster=~\"$cluster\", job=~\"($namespace)/(ingester.*|cortex$)\", route=\"/cortex.Ingester/Push\"})) * 1e3",
                      "format": "time_series",
-                     "intervalFactor": 2,
-                     "legendFormat": "50th Percentile",
-                     "refId": "B",
-                     "step": 10
+                     "legendFormat": "50th percentile",
+                     "refId": "B"
                   },
                   {
                      "expr": "1e3 * sum(cluster_job_route:cortex_request_duration_seconds_sum:sum_rate{cluster=~\"$cluster\", job=~\"($namespace)/(ingester.*|cortex$)\", route=\"/cortex.Ingester/Push\"}) / sum(cluster_job_route:cortex_request_duration_seconds_count:sum_rate{cluster=~\"$cluster\", job=~\"($namespace)/(ingester.*|cortex$)\", route=\"/cortex.Ingester/Push\"})",
                      "format": "time_series",
-                     "intervalFactor": 2,
                      "legendFormat": "Average",
-                     "refId": "C",
-                     "step": 10
+                     "refId": "C"
                   }
                ],
                "thresholds": [ ],
@@ -1216,8 +1184,8 @@
                "timeShift": null,
                "title": "Latency",
                "tooltip": {
-                  "shared": false,
-                  "sort": 0,
+                  "shared": true,
+                  "sort": 2,
                   "value_type": "individual"
                },
                "type": "graph",
@@ -1276,10 +1244,8 @@
                      "expr": "histogram_quantile(0.99, sum by(le, pod) (rate(cortex_request_duration_seconds_bucket{cluster=~\"$cluster\", job=~\"($namespace)/(ingester.*|cortex$)\", route=\"/cortex.Ingester/Push\"}[$__rate_interval])))",
                      "format": "time_series",
                      "interval": "15s",
-                     "intervalFactor": 2,
                      "legendFormat": "",
-                     "legendLink": null,
-                     "step": 10
+                     "legendLink": null
                   }
                ],
                "thresholds": [ ],
@@ -1335,6 +1301,8 @@
                   "3xx": "#6ED0E0",
                   "4xx": "#EF843C",
                   "5xx": "#E24D42",
+                  "OK": "#7EB26D",
+                  "cancel": "#A9A9A9",
                   "error": "#E24D42",
                   "success": "#7EB26D"
                },
@@ -1368,13 +1336,11 @@
                "steppedLine": false,
                "targets": [
                   {
-                     "expr": "sum by (status) (\n  label_replace(label_replace(rate(cortex_kv_request_duration_seconds_count{cluster=~\"$cluster\", job=~\"($namespace)/(ingester.*|cortex$)\"}[$__rate_interval]),\n  \"status\", \"${1}xx\", \"status_code\", \"([0-9])..\"),\n  \"status\", \"${1}\", \"status_code\", \"([a-z]+)\"))\n",
+                     "expr": "sum by (status) (\n  label_replace(label_replace(rate(cortex_kv_request_duration_seconds_count{cluster=~\"$cluster\", job=~\"($namespace)/(ingester.*|cortex$)\"}[$__rate_interval]),\n  \"status\", \"${1}xx\", \"status_code\", \"([0-9])..\"),\n  \"status\", \"${1}\", \"status_code\", \"([a-zA-Z]+)\"))\n",
                      "format": "time_series",
                      "interval": "15s",
-                     "intervalFactor": 2,
                      "legendFormat": "{{status}}",
-                     "refId": "A",
-                     "step": 10
+                     "refId": "A"
                   }
                ],
                "thresholds": [ ],
@@ -1382,8 +1348,8 @@
                "timeShift": null,
                "title": "Requests / sec",
                "tooltip": {
-                  "shared": false,
-                  "sort": 0,
+                  "shared": true,
+                  "sort": 2,
                   "value_type": "individual"
                },
                "type": "graph",
@@ -1447,26 +1413,20 @@
                   {
                      "expr": "histogram_quantile(0.99, sum by (le) (cluster_job:cortex_kv_request_duration_seconds_bucket:sum_rate{cluster=~\"$cluster\", job=~\"($namespace)/(ingester.*|cortex$)\"})) * 1e3",
                      "format": "time_series",
-                     "intervalFactor": 2,
-                     "legendFormat": "99th Percentile",
-                     "refId": "A",
-                     "step": 10
+                     "legendFormat": "99th percentile",
+                     "refId": "A"
                   },
                   {
                      "expr": "histogram_quantile(0.50, sum by (le) (cluster_job:cortex_kv_request_duration_seconds_bucket:sum_rate{cluster=~\"$cluster\", job=~\"($namespace)/(ingester.*|cortex$)\"})) * 1e3",
                      "format": "time_series",
-                     "intervalFactor": 2,
-                     "legendFormat": "50th Percentile",
-                     "refId": "B",
-                     "step": 10
+                     "legendFormat": "50th percentile",
+                     "refId": "B"
                   },
                   {
                      "expr": "1e3 * sum(cluster_job:cortex_kv_request_duration_seconds_sum:sum_rate{cluster=~\"$cluster\", job=~\"($namespace)/(ingester.*|cortex$)\"}) / sum(cluster_job:cortex_kv_request_duration_seconds_count:sum_rate{cluster=~\"$cluster\", job=~\"($namespace)/(ingester.*|cortex$)\"})",
                      "format": "time_series",
-                     "intervalFactor": 2,
                      "legendFormat": "Average",
-                     "refId": "C",
-                     "step": 10
+                     "refId": "C"
                   }
                ],
                "thresholds": [ ],
@@ -1474,8 +1434,8 @@
                "timeShift": null,
                "title": "Latency",
                "tooltip": {
-                  "shared": false,
-                  "sort": 0,
+                  "shared": true,
+                  "sort": 2,
                   "value_type": "individual"
                },
                "type": "graph",
@@ -1556,19 +1516,15 @@
                      "expr": "sum(rate(cortex_ingester_shipper_uploads_total{cluster=~\"$cluster\", job=~\"($namespace)/(ingester.*|cortex$)\"}[$__rate_interval])) - sum(rate(cortex_ingester_shipper_upload_failures_total{cluster=~\"$cluster\", job=~\"($namespace)/(ingester.*|cortex$)\"}[$__rate_interval]))",
                      "format": "time_series",
                      "interval": "15s",
-                     "intervalFactor": 2,
                      "legendFormat": "successful",
-                     "legendLink": null,
-                     "step": 10
+                     "legendLink": null
                   },
                   {
                      "expr": "sum(rate(cortex_ingester_shipper_upload_failures_total{cluster=~\"$cluster\", job=~\"($namespace)/(ingester.*|cortex$)\"}[$__rate_interval]))",
                      "format": "time_series",
                      "interval": "15s",
-                     "intervalFactor": 2,
                      "legendFormat": "failed",
-                     "legendLink": null,
-                     "step": 10
+                     "legendLink": null
                   }
                ],
                "thresholds": [ ],
@@ -1576,8 +1532,8 @@
                "timeShift": null,
                "title": "Uploaded blocks / sec",
                "tooltip": {
-                  "shared": false,
-                  "sort": 0,
+                  "shared": true,
+                  "sort": 2,
                   "value_type": "individual"
                },
                "type": "graph",
@@ -1643,28 +1599,22 @@
                      "expr": "histogram_quantile(0.99, sum(rate(thanos_objstore_bucket_operation_duration_seconds_bucket{cluster=~\"$cluster\", job=~\"($namespace)/(ingester.*|cortex$)\",component=\"ingester\",operation=\"upload\"}[$__rate_interval])) by (le)) * 1e3",
                      "format": "time_series",
                      "interval": "15s",
-                     "intervalFactor": 2,
                      "legendFormat": "99th Percentile",
-                     "refId": "A",
-                     "step": 10
+                     "refId": "A"
                   },
                   {
                      "expr": "histogram_quantile(0.50, sum(rate(thanos_objstore_bucket_operation_duration_seconds_bucket{cluster=~\"$cluster\", job=~\"($namespace)/(ingester.*|cortex$)\",component=\"ingester\",operation=\"upload\"}[$__rate_interval])) by (le)) * 1e3",
                      "format": "time_series",
                      "interval": "15s",
-                     "intervalFactor": 2,
                      "legendFormat": "50th Percentile",
-                     "refId": "B",
-                     "step": 10
+                     "refId": "B"
                   },
                   {
                      "expr": "sum(rate(thanos_objstore_bucket_operation_duration_seconds_sum{cluster=~\"$cluster\", job=~\"($namespace)/(ingester.*|cortex$)\",component=\"ingester\",operation=\"upload\"}[$__rate_interval])) * 1e3 / sum(rate(thanos_objstore_bucket_operation_duration_seconds_count{cluster=~\"$cluster\", job=~\"($namespace)/(ingester.*|cortex$)\",component=\"ingester\",operation=\"upload\"}[$__rate_interval]))",
                      "format": "time_series",
                      "interval": "15s",
-                     "intervalFactor": 2,
                      "legendFormat": "Average",
-                     "refId": "C",
-                     "step": 10
+                     "refId": "C"
                   }
                ],
                "thresholds": [ ],
@@ -1672,8 +1622,8 @@
                "timeShift": null,
                "title": "Upload latency",
                "tooltip": {
-                  "shared": false,
-                  "sort": 0,
+                  "shared": true,
+                  "sort": 2,
                   "value_type": "individual"
                },
                "type": "graph",
@@ -1754,19 +1704,15 @@
                      "expr": "sum(rate(cortex_ingester_tsdb_compactions_total{cluster=~\"$cluster\", job=~\"($namespace)/(ingester.*|cortex$)\"}[$__rate_interval]))",
                      "format": "time_series",
                      "interval": "15s",
-                     "intervalFactor": 2,
                      "legendFormat": "successful",
-                     "legendLink": null,
-                     "step": 10
+                     "legendLink": null
                   },
                   {
                      "expr": "sum(rate(cortex_ingester_tsdb_compactions_failed_total{cluster=~\"$cluster\", job=~\"($namespace)/(ingester.*|cortex$)\"}[$__rate_interval]))",
                      "format": "time_series",
                      "interval": "15s",
-                     "intervalFactor": 2,
                      "legendFormat": "failed",
-                     "legendLink": null,
-                     "step": 10
+                     "legendLink": null
                   }
                ],
                "thresholds": [ ],
@@ -1774,8 +1720,8 @@
                "timeShift": null,
                "title": "Compactions / sec",
                "tooltip": {
-                  "shared": false,
-                  "sort": 0,
+                  "shared": true,
+                  "sort": 2,
                   "value_type": "individual"
                },
                "type": "graph",
@@ -1841,28 +1787,22 @@
                      "expr": "histogram_quantile(0.99, sum(rate(cortex_ingester_tsdb_compaction_duration_seconds_bucket{cluster=~\"$cluster\", job=~\"($namespace)/(ingester.*|cortex$)\"}[$__rate_interval])) by (le)) * 1e3",
                      "format": "time_series",
                      "interval": "15s",
-                     "intervalFactor": 2,
                      "legendFormat": "99th Percentile",
-                     "refId": "A",
-                     "step": 10
+                     "refId": "A"
                   },
                   {
                      "expr": "histogram_quantile(0.50, sum(rate(cortex_ingester_tsdb_compaction_duration_seconds_bucket{cluster=~\"$cluster\", job=~\"($namespace)/(ingester.*|cortex$)\"}[$__rate_interval])) by (le)) * 1e3",
                      "format": "time_series",
                      "interval": "15s",
-                     "intervalFactor": 2,
                      "legendFormat": "50th Percentile",
-                     "refId": "B",
-                     "step": 10
+                     "refId": "B"
                   },
                   {
                      "expr": "sum(rate(cortex_ingester_tsdb_compaction_duration_seconds_sum{cluster=~\"$cluster\", job=~\"($namespace)/(ingester.*|cortex$)\"}[$__rate_interval])) * 1e3 / sum(rate(cortex_ingester_tsdb_compaction_duration_seconds_count{cluster=~\"$cluster\", job=~\"($namespace)/(ingester.*|cortex$)\"}[$__rate_interval]))",
                      "format": "time_series",
                      "interval": "15s",
-                     "intervalFactor": 2,
                      "legendFormat": "Average",
-                     "refId": "C",
-                     "step": 10
+                     "refId": "C"
                   }
                ],
                "thresholds": [ ],
@@ -1870,8 +1810,8 @@
                "timeShift": null,
                "title": "Compactions latency",
                "tooltip": {
-                  "shared": false,
-                  "sort": 0,
+                  "shared": true,
+                  "sort": 2,
                   "value_type": "individual"
                },
                "type": "graph",
@@ -1952,19 +1892,15 @@
                      "expr": "sum(rate(cortex_ingester_tsdb_wal_truncations_total{cluster=~\"$cluster\", job=~\"($namespace)/(ingester.*|cortex$)\"}[$__rate_interval])) - sum(rate(cortex_ingester_tsdb_wal_truncations_failed_total{cluster=~\"$cluster\", job=~\"($namespace)/(ingester.*|cortex$)\"}[$__rate_interval]))",
                      "format": "time_series",
                      "interval": "15s",
-                     "intervalFactor": 2,
                      "legendFormat": "successful",
-                     "legendLink": null,
-                     "step": 10
+                     "legendLink": null
                   },
                   {
                      "expr": "sum(rate(cortex_ingester_tsdb_wal_truncations_failed_total{cluster=~\"$cluster\", job=~\"($namespace)/(ingester.*|cortex$)\"}[$__rate_interval]))",
                      "format": "time_series",
                      "interval": "15s",
-                     "intervalFactor": 2,
                      "legendFormat": "failed",
-                     "legendLink": null,
-                     "step": 10
+                     "legendLink": null
                   }
                ],
                "thresholds": [ ],
@@ -1972,8 +1908,8 @@
                "timeShift": null,
                "title": "WAL truncations / sec",
                "tooltip": {
-                  "shared": false,
-                  "sort": 0,
+                  "shared": true,
+                  "sort": 2,
                   "value_type": "individual"
                },
                "type": "graph",
@@ -2042,19 +1978,15 @@
                      "expr": "sum(rate(cortex_ingester_tsdb_checkpoint_creations_total{cluster=~\"$cluster\", job=~\"($namespace)/(ingester.*|cortex$)\"}[$__rate_interval])) - sum(rate(cortex_ingester_tsdb_checkpoint_creations_failed_total{cluster=~\"$cluster\", job=~\"($namespace)/(ingester.*|cortex$)\"}[$__rate_interval]))",
                      "format": "time_series",
                      "interval": "15s",
-                     "intervalFactor": 2,
                      "legendFormat": "successful",
-                     "legendLink": null,
-                     "step": 10
+                     "legendLink": null
                   },
                   {
                      "expr": "sum(rate(cortex_ingester_tsdb_checkpoint_creations_failed_total{cluster=~\"$cluster\", job=~\"($namespace)/(ingester.*|cortex$)\"}[$__rate_interval]))",
                      "format": "time_series",
                      "interval": "15s",
-                     "intervalFactor": 2,
                      "legendFormat": "failed",
-                     "legendLink": null,
-                     "step": 10
+                     "legendLink": null
                   }
                ],
                "thresholds": [ ],
@@ -2062,8 +1994,8 @@
                "timeShift": null,
                "title": "Checkpoints created / sec",
                "tooltip": {
-                  "shared": false,
-                  "sort": 0,
+                  "shared": true,
+                  "sort": 2,
                   "value_type": "individual"
                },
                "type": "graph",
@@ -2129,10 +2061,8 @@
                      "expr": "sum(rate(cortex_ingester_tsdb_wal_truncate_duration_seconds_sum{cluster=~\"$cluster\", job=~\"($namespace)/(ingester.*|cortex$)\"}[$__rate_interval])) / sum(rate(cortex_ingester_tsdb_wal_truncate_duration_seconds_count{cluster=~\"$cluster\", job=~\"($namespace)/(ingester.*|cortex$)\"}[$__rate_interval]))",
                      "format": "time_series",
                      "interval": "15s",
-                     "intervalFactor": 2,
                      "legendFormat": "avg",
-                     "legendLink": null,
-                     "step": 10
+                     "legendLink": null
                   }
                ],
                "thresholds": [ ],
@@ -2140,8 +2070,8 @@
                "timeShift": null,
                "title": "WAL truncations latency (includes checkpointing)",
                "tooltip": {
-                  "shared": false,
-                  "sort": 0,
+                  "shared": true,
+                  "sort": 2,
                   "value_type": "individual"
                },
                "type": "graph",
@@ -2209,19 +2139,15 @@
                      "expr": "sum(rate(cortex_ingester_wal_corruptions_total{cluster=~\"$cluster\", job=~\"($namespace)/(ingester.*|cortex$)\"}[$__rate_interval]))",
                      "format": "time_series",
                      "interval": "15s",
-                     "intervalFactor": 2,
                      "legendFormat": "WAL",
-                     "legendLink": null,
-                     "step": 10
+                     "legendLink": null
                   },
                   {
                      "expr": "sum(rate(cortex_ingester_tsdb_mmap_chunk_corruptions_total{cluster=~\"$cluster\", job=~\"($namespace)/(ingester.*|cortex$)\"}[$__rate_interval]))",
                      "format": "time_series",
                      "interval": "15s",
-                     "intervalFactor": 2,
                      "legendFormat": "mmap-ed chunks",
-                     "legendLink": null,
-                     "step": 10
+                     "legendLink": null
                   }
                ],
                "thresholds": [ ],
@@ -2229,8 +2155,8 @@
                "timeShift": null,
                "title": "Corruptions / sec",
                "tooltip": {
-                  "shared": false,
-                  "sort": 0,
+                  "shared": true,
+                  "sort": 2,
                   "value_type": "individual"
                },
                "type": "graph",
@@ -2282,7 +2208,7 @@
                "value": "default"
             },
             "hide": 0,
-            "label": null,
+            "label": "Data source",
             "name": "datasource",
             "options": [ ],
             "query": "prometheus",

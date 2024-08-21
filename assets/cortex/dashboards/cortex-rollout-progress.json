@@ -119,8 +119,8 @@
          "timeShift": null,
          "title": "Rollout progress",
          "tooltip": {
-            "shared": false,
-            "sort": 0,
+            "shared": true,
+            "sort": 2,
             "value_type": "individual"
          },
          "type": "bargauge",
@@ -223,8 +223,8 @@
          "timeShift": null,
          "title": "Writes - 2xx",
          "tooltip": {
-            "shared": false,
-            "sort": 0,
+            "shared": true,
+            "sort": 2,
             "value_type": "individual"
          },
          "type": "stat",
@@ -335,8 +335,8 @@
          "timeShift": null,
          "title": "Writes - 4xx",
          "tooltip": {
-            "shared": false,
-            "sort": 0,
+            "shared": true,
+            "sort": 2,
             "value_type": "individual"
          },
          "type": "stat",
@@ -443,8 +443,8 @@
          "timeShift": null,
          "title": "Writes - 5xx",
          "tooltip": {
-            "shared": false,
-            "sort": 0,
+            "shared": true,
+            "sort": 2,
             "value_type": "individual"
          },
          "type": "stat",
@@ -555,8 +555,8 @@
          "timeShift": null,
          "title": "Writes 99th Latency",
          "tooltip": {
-            "shared": false,
-            "sort": 0,
+            "shared": true,
+            "sort": 2,
             "value_type": "individual"
          },
          "type": "stat",
@@ -659,8 +659,8 @@
          "timeShift": null,
          "title": "Reads - 2xx",
          "tooltip": {
-            "shared": false,
-            "sort": 0,
+            "shared": true,
+            "sort": 2,
             "value_type": "individual"
          },
          "type": "stat",
@@ -771,8 +771,8 @@
          "timeShift": null,
          "title": "Reads - 4xx",
          "tooltip": {
-            "shared": false,
-            "sort": 0,
+            "shared": true,
+            "sort": 2,
             "value_type": "individual"
          },
          "type": "stat",
@@ -879,8 +879,8 @@
          "timeShift": null,
          "title": "Reads - 5xx",
          "tooltip": {
-            "shared": false,
-            "sort": 0,
+            "shared": true,
+            "sort": 2,
             "value_type": "individual"
          },
          "type": "stat",
@@ -991,8 +991,8 @@
          "timeShift": null,
          "title": "Reads 99th Latency",
          "tooltip": {
-            "shared": false,
-            "sort": 0,
+            "shared": true,
+            "sort": 2,
             "value_type": "individual"
          },
          "type": "stat",
@@ -1119,8 +1119,8 @@
          "timeShift": null,
          "title": "Unhealthy pods",
          "tooltip": {
-            "shared": false,
-            "sort": 0,
+            "shared": true,
+            "sort": 2,
             "value_type": "individual"
          },
          "type": "stat",
@@ -1254,19 +1254,15 @@
                "expr": "1 - (\n  avg_over_time(histogram_quantile(0.99, sum by (le) (cluster_job_route:cortex_request_duration_seconds_bucket:sum_rate{cluster=~\"$cluster\", job=~\"($namespace)/(gateway|cortex-gw|cortex-gw-internal)\", route=~\"api_(v1|prom)_push\"} offset 24h))[1h:])\n  /\n  avg_over_time(histogram_quantile(0.99, sum by (le) (cluster_job_route:cortex_request_duration_seconds_bucket:sum_rate{cluster=~\"$cluster\", job=~\"($namespace)/(gateway|cortex-gw|cortex-gw-internal)\", route=~\"api_(v1|prom)_push\"}))[1h:])\n)\n",
                "format": "time_series",
                "interval": "15s",
-               "intervalFactor": 2,
                "legendFormat": "writes",
-               "legendLink": null,
-               "step": 10
+               "legendLink": null
             },
             {
                "expr": "1 - (\n  avg_over_time(histogram_quantile(0.99, sum by (le) (cluster_job_route:cortex_request_duration_seconds_bucket:sum_rate{cluster=~\"$cluster\", job=~\"($namespace)/(gateway|cortex-gw|cortex-gw-internal)\", route=~\"(prometheus|api_prom)_api_v1_.+\"} offset 24h))[1h:])\n  /\n  avg_over_time(histogram_quantile(0.99, sum by (le) (cluster_job_route:cortex_request_duration_seconds_bucket:sum_rate{cluster=~\"$cluster\", job=~\"($namespace)/(gateway|cortex-gw|cortex-gw-internal)\", route=~\"(prometheus|api_prom)_api_v1_.+\"}))[1h:])\n)\n",
                "format": "time_series",
                "interval": "15s",
-               "intervalFactor": 2,
                "legendFormat": "reads",
-               "legendLink": null,
-               "step": 10
+               "legendLink": null
             }
          ],
          "thresholds": [ ],
@@ -1274,8 +1270,8 @@
          "timeShift": null,
          "title": "Latency vs 24h ago",
          "tooltip": {
-            "shared": false,
-            "sort": 0,
+            "shared": true,
+            "sort": 2,
             "value_type": "individual"
          },
          "type": "graph",
@@ -1321,7 +1317,7 @@
                "value": "default"
             },
             "hide": 0,
-            "label": null,
+            "label": "Data source",
             "name": "datasource",
             "options": [ ],
             "query": "prometheus",
