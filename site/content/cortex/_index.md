@@ -360,7 +360,7 @@ annotations:
   message: |
     The number of in-memory series per ingester in {{ $labels.cluster }}/{{ $labels.namespace }} is too high.
 expr: |
-  avg by (cluster, namespace) (cortex_ingester_memory_series) > 1.6e6
+  avg by (cluster, namespace) (cortex_ingester_memory_series) > 3.2e6
 for: 2h
 labels:
   severity: warning
@@ -2193,7 +2193,7 @@ expr: |
         cortex_ingester_memory_series
       )[24h:]
     )
-    / 1500000
+    / 3000000
   )
 labels:
   deployment: ingester
@@ -2207,7 +2207,7 @@ record: cluster_namespace_deployment_reason:required_replicas:count
 expr: |
   ceil(
     sum by (cluster, namespace) (cortex_overrides{limit_name="max_global_series_per_user"})
-    * 3 * 0.59999999999999998 / 1500000
+    * 3 * 0.59999999999999998 / 3000000
   )
 labels:
   deployment: ingester
