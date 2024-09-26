@@ -374,7 +374,7 @@ annotations:
   message: |
     Ingesters in {{ $labels.cluster }}/{{ $labels.namespace }} ingest too many samples per second.
 expr: |
-  avg by (cluster, namespace) (rate(cortex_ingester_ingested_samples_total[1m])) > 80e3
+  avg by (cluster, namespace) (rate(cortex_ingester_ingested_samples_total[1m])) > 160e3
 for: 15m
 labels:
   severity: warning
