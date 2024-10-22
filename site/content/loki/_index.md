@@ -274,7 +274,7 @@ record: cluster_namespace_job_route:loki_request_duration_seconds_count:sum_rate
 Following dashboards are generated from mixins and hosted on github:
 
 
-- [loki-bloom-compactor](https://github.com/monitoring-mixins/website/blob/master/assets/loki/dashboards/loki-bloom-compactor.json)
+- [loki-bloom-build](https://github.com/monitoring-mixins/website/blob/master/assets/loki/dashboards/loki-bloom-build.json)
 - [loki-bloom-gateway](https://github.com/monitoring-mixins/website/blob/master/assets/loki/dashboards/loki-bloom-gateway.json)
 - [loki-chunks](https://github.com/monitoring-mixins/website/blob/master/assets/loki/dashboards/loki-chunks.json)
 - [loki-deletion](https://github.com/monitoring-mixins/website/blob/master/assets/loki/dashboards/loki-deletion.json)
